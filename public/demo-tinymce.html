@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditeur d'Articles - SIPN V2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sipn-blue': '#003B7A',
+                        'sipn-orange': '#F47920',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        .content {
+            padding: 2rem;
+        }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 2rem;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #6b7280;
+        }
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        .tab:hover {
+            color: #667eea;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e5e7eb;
+        }
+        .preview-container {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 400px;
+        }
+        .preview-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        .preview-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #374151;
+        }
+        /* Styles pour le contenu de l'aperçu */
+        .preview-content h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #003B7A;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid #F47920;
+            padding-bottom: 0.5rem;
+        }
+        .preview-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #F47920;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .preview-content p {
+            margin-bottom: 1.5rem;
+        }
+        .preview-content ul, .preview-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .preview-content li {
+            margin-bottom: 0.75rem;
+        }
+        .preview-content blockquote {
+            border-left: 5px solid #F47920;
+            background: linear-gradient(to right, #FFF5EE 0%, white 100%);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+        .preview-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .preview-content table thead {
+            background: linear-gradient(135deg, #003B7A 0%, #0056b3 100%);
+            color: white;
+        }
+        .preview-content table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        .preview-content table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .preview-content img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>✍️ Éditeur d'Articles</h1>
+                <p>Créez de beaux articles avec un rendu professionnel</p>
+            </div>
+
+            <div class="content">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('edition')">
+                        ✏️ Édition
+                    </div>
+                    <div class="tab" onclick="switchTab('apercu')">
+                        👁️ Aperçu
+                    </div>
+                </div>
+
+                <!-- Tab Édition -->
+                <div id="tab-edition" class="tab-content active">
+                    <form id="articleForm">
+                        <div class="form-group">
+                            <label class="form-label">Titre de l'article</label>
+                            <input type="text" id="articleTitle" class="form-input" placeholder="Entrez le titre de votre article..." value="Mon Premier Article">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Contenu</label>
+                            <textarea id="articleContent" style="height: 500px;">
+<p class="lead">Ceci est un exemple d'article créé avec TinyMCE. L'éditeur offre de nombreuses fonctionnalités pour créer du contenu riche et professionnel.</p>
+
+<h2>Première Section</h2>
+<p>Vous pouvez facilement formater votre texte avec <strong>gras</strong>, <em>italique</em>, ou <u>souligné</u>. L'éditeur supporte également les listes, tableaux, images et bien plus encore.</p>
+
+<h3>Sous-section</h3>
+<ul>
+<li>Point important numéro 1</li>
+<li>Point important numéro 2</li>
+<li>Point important numéro 3</li>
+</ul>
+
+<blockquote>
+<p>Ceci est une citation importante qui sera mise en évidence dans votre article.</p>
+</blockquote>
+
+<h2>Deuxième Section</h2>
+<p>Continuez à écrire votre contenu ici. L'éditeur TinyMCE vous permet de créer des articles professionnels facilement.</p>
+
+<div class="callout callout-success">
+<p><strong>Astuce :</strong> Utilisez les templates prédéfinis pour gagner du temps !</p>
+</div>
+                            </textarea>
+                        </div>
+
+                        <div class="actions">
+                            <button type="button" class="btn btn-primary" onclick="switchTab('apercu')">
+                                👁️ Voir l'aperçu
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="exportHTML()">
+                                💾 Exporter HTML
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tab Aperçu -->
+                <div id="tab-apercu" class="tab-content">
+                    <div class="preview-container">
+                        <h1 class="preview-title" id="previewTitle">Mon Premier Article</h1>
+                        <div class="preview-content" id="previewContent">
+                            <!-- Le contenu sera inséré ici -->
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="btn btn-primary" onclick="switchTab('edition')">
+                            ✏️ Retour à l'édition
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="exportHTML()">
+                            💾 Exporter HTML
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    
+    <script>
+        // Configuration TinyMCE
+        tinymce.init({
+            selector: '#articleContent',
+            height: 500,
+            menubar: true,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount', 'template'
+            ],
+            toolbar: 'undo redo | blocks | bold italic underline strikethrough | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | forecolor backcolor | ' +
+                'link image media table | template | removeformat | code fullscreen',
+            
+            templates: [
+                {
+                    title: 'Article standard',
+                    description: 'Structure de base',
+                    content: '<p class="lead">Introduction accrocheuse.</p><h2>Première section</h2><p>Contenu...</p>'
+                },
+                {
+                    title: 'Article avec encadré',
+                    description: 'Avec encadré de succès',
+                    content: '<p>Texte...</p><div class="callout callout-success"><p><strong>Résultat :</strong> Description</p></div>'
+                }
+            ],
+            
+            content_style: `
+                body { 
+                    font-family: 'Inter', sans-serif; 
+                    font-size: 16px; 
+                    line-height: 1.6;
+                    color: #333;
+                    padding: 20px;
+                }
+                .lead {
+                    font-size: 1.25em;
+                    font-weight: 600;
+                    color: #555;
+                    line-height: 1.6;
+                    margin-bottom: 1.5em;
+                    padding-left: 1em;
+                    border-left: 4px solid #F47920;
+                }
+                .callout {
+                    background: #f0f9ff;
+                    border-left: 4px solid #0284c7;
+                    padding: 1em 1.5em;
+                    margin: 1.5em 0;
+                    border-radius: 4px;
+                }
+                .callout-success {
+                    background: #f0fdf4;
+                    border-left-color: #22c55e;
+                }
+                h2 {
+                    color: #003B7A;
+                    border-bottom: 2px solid #F47920;
+                    padding-bottom: 0.3em;
+                    margin-top: 1.5em;
+                }
+                h3 {
+                    color: #F47920;
+                }
+            `,
+            
+            branding: false,
+            promotion: false,
+            language: 'fr_FR',
+        });
+
+        // Gestion des tabs
+        function switchTab(tabName) {
+            // Cacher tous les tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Afficher le tab sélectionné
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.querySelector(`.tab:nth-child(${tabName === 'edition' ? 1 : 2})`).classList.add('active');
+
+            // Si on va sur l'aperçu, mettre à jour le contenu
+            if (tabName === 'apercu') {
+                updatePreview();
+            }
+        }
+
+        // Mettre à jour l'aperçu
+        function updatePreview() {
+            const title = document.getElementById('articleTitle').value;
+            const content = tinymce.get('articleContent').getContent();
+
+            document.getElementById('previewTitle').textContent = title || 'Sans titre';
+            document.getElementById('previewContent').innerHTML = content;
+        }
+
+        // Exporter en HTML
+        function exportHTML() {
+            const title = document.getElementById('articleTitle').value;
+            const content = tinymce.get('articleContent').getContent();
+
+            const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <link rel="stylesheet" href="article-content.css">
+</head>
+<body>
+    <article class="article-content">
+        <h1>${title}</h1>
+        ${content}
+    </article>
+</body>
+</html>`;
+
+            // Créer un blob et télécharger
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'article.html';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert('✅ Article exporté avec succès !');
+        }
+
+        // Mettre à jour l'aperçu quand le titre change
+        document.getElementById('articleTitle').addEventListener('input', function() {
+            if (document.getElementById('tab-apercu').classList.contains('active')) {
+                updatePreview();
+            }
+        });
+    </script>
+</body>
+</html>

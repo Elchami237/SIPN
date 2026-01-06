@@ -1,0 +1,305 @@
+/* Styles d'authentification SIPN - Charte graphique */
+
+:root {
+    --sipn-blue: #003B7A;
+    --sipn-blue-light: #0056b3;
+    --sipn-blue-dark: #002855;
+    --sipn-orange: #F47920;
+    --sipn-orange-dark: #D66A1A;
+    --sipn-orange-light: #FF8C3A;
+}
+
+/* Page d'authentification */
+.auth-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--sipn-blue) 0%, var(--sipn-blue-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+/* Carte d'authentification */
+.auth-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    max-width: 450px;
+    width: 100%;
+}
+
+/* En-tête de la carte */
+.auth-header {
+    background: linear-gradient(135deg, var(--sipn-blue) 0%, var(--sipn-blue-light) 100%);
+    color: white;
+    padding: 2.5rem 2rem;
+    text-align: center;
+}
+
+.auth-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+/* Logo */
+.auth-logo {
+    width: 120px;
+    height: auto;
+    margin: 0 auto 1.5rem;
+    display: block;
+}
+
+/* Corps de la carte */
+.auth-body {
+    padding: 2rem;
+}
+
+/* Formulaires */
+.auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form label {
+    display: block;
+    font-weight: 600;
+    color: var(--sipn-blue);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--sipn-orange);
+    box-shadow: 0 0 0 3px rgba(244, 121, 32, 0.1);
+}
+
+.auth-form input::placeholder {
+    color: #9ca3af;
+}
+
+/* Checkbox */
+.auth-form input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+    accent-color: var(--sipn-orange);
+}
+
+.auth-form .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #4b5563;
+    cursor: pointer;
+}
+
+/* Boutons */
+.btn-primary {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: linear-gradient(135deg, var(--sipn-orange) 0%, var(--sipn-orange-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(244, 121, 32, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(244, 121, 32, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: white;
+    color: var(--sipn-blue);
+    border: 2px solid var(--sipn-blue);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background: var(--sipn-blue);
+    color: white;
+}
+
+/* Liens */
+.auth-link {
+    color: var(--sipn-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.auth-link:hover {
+    color: var(--sipn-orange-dark);
+    text-decoration: underline;
+}
+
+/* Pied de page de la carte */
+.auth-footer {
+    padding: 1.5rem 2rem;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+/* Messages d'erreur */
+.error-message {
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    color: #991b1b;
+    font-size: 0.9rem;
+}
+
+/* Messages de succès */
+.success-message {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    color: #166534;
+    font-size: 0.9rem;
+}
+
+/* Messages d'info */
+.info-message {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    color: #1e40af;
+    font-size: 0.9rem;
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.divider span {
+    padding: 0 1rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .auth-card {
+        margin: 1rem;
+    }
+    
+    .auth-header {
+        padding: 2rem 1.5rem;
+    }
+    
+    .auth-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .auth-body {
+        padding: 1.5rem;
+    }
+    
+    .auth-footer {
+        padding: 1.25rem 1.5rem;
+    }
+}
+
+/* Animation d'entrée */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-card {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Loading state */
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-primary.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
